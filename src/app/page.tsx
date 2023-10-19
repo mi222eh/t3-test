@@ -7,33 +7,61 @@ import { getServerAuthSession } from "~/server/auth";
 import { api } from "~/trpc/server";
 
 export default async function Home() {
-  const hello = await api.post.hello.query({ text: "from tRPC" });
   const session = await getServerAuthSession();
 
   return (
-    <main>
-      <div className="flex justify-between">
-        <h1 className="p-2 text-4xl">Posts</h1>
+    <main className="m-auto flex w-max flex-col gap-2">
+      {session && (
+        <>
+          <p className="text-1xl text-center text-white">
+            <span>Logged in as {session?.user?.name}</span>
+          </p>
+          <Link href="/api/auth/signout" className="btn btn-error btn-xs">
+            Sign out
+          </Link>
+        </>
+      )}
 
-        {session && (
-          <div className="flex gap-2 p-4">
-            <p className="text-1xl text-center text-white">
-              <span>Logged in as {session?.user?.name}</span>
-            </p>
-            <Link href="/api/auth/signout" className="btn btn-error btn-xs">
-              Sign out
-            </Link>
-          </div>
-        )}
+      {!session && (
+        <>
+          <p className="text-1xl text-center text-white">
+            <span>Not logged in</span>
+          </p>
 
-        {!session && (
-          <div className="flex gap-2 p-4">
+          <div className="flex gap-2">
             <Link href="/api/auth/signin" className="btn btn-primary btn-xs">
               Sign in
             </Link>
+            <Link href="/signup" className="btn btn-secondary btn-xs">
+              Sign up
+            </Link>
           </div>
-        )}
-      </div>
+        </>
+      )}
+      <Posts />
     </main>
+  );
+}
+
+async function Posts() {
+  const session = await getServerAuthSession();
+  if (!session) {
+    return null;
+  }
+
+  const posts = await api.post.getAll.query();
+
+  return (
+    <div className="flex flex-col gap-4">
+      {posts.map((post) => (
+        <div
+          key={post.id}
+          className="card card-bordered flex flex-col gap-2 p-4 shadow-2xl"
+        >
+          <h1 className="text-2xl text-white">{post.name}</h1>
+          <p className="text-white">{post.createdAt.toDateString()}</p>
+        </div>
+      ))}
+    </div>
   );
 }

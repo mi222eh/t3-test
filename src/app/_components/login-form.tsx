@@ -2,6 +2,9 @@
 import { signIn } from "next-auth/react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import Form from "./Form";
+import Label from "./Label";
+import Input from "./Input";
 
 const schema = z.object({
   username: z.string().min(1).max(20),
@@ -21,7 +24,8 @@ export default function LoginForm() {
   });
 
   return (
-    <form
+    <Form
+      className="flex w-fit flex-col gap-2 justify-self-center p-4"
       onSubmit={handleSubmit(async (data) => {
         await signIn("credentials", {
           username: data.username,
@@ -30,38 +34,17 @@ export default function LoginForm() {
         });
       })}
     >
-      <div className="my-4">
-        <label
-          className="mb-2 block font-bold text-gray-700"
-          htmlFor="username"
-        >
-          Username
-        </label>
-        <input
-          className={`w-full rounded-md border border-gray-300 px-3 py-2 ${
-            errors.username ? "border-red-500" : ""
-          }`}
+      <div className="flex flex-col">
+        <Label htmlFor="username">Username</Label>
+        <Input
           type="text"
           placeholder="Enter your username"
           {...register("username")}
         />
-        {errors.username && (
-          <span className="text-sm text-red-500">
-            {errors.username.message?.toString()}
-          </span>
-        )}
       </div>
-      <div className="my-4">
-        <label
-          className="mb-2 block font-bold text-gray-700"
-          htmlFor="password"
-        >
-          Password
-        </label>
-        <input
-          className={`w-full rounded-md border border-gray-300 px-3 py-2 ${
-            errors.password ? "border-red-500" : ""
-          }`}
+      <div className="flex flex-col">
+        <Label htmlFor="password">Password</Label>
+        <Input
           type="password"
           placeholder="Enter your password"
           {...register("password")}
@@ -72,12 +55,9 @@ export default function LoginForm() {
           </span>
         )}
       </div>
-      <button
-        className="rounded-md bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
-        type="submit"
-      >
+      <button className="btn btn-primary" type="submit">
         Login
       </button>
-    </form>
+    </Form>
   );
 }

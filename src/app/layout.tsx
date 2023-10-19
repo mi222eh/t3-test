@@ -26,20 +26,13 @@ export default function RootLayout({
     <html lang="en">
       <body className={`font-sans ${inter.variable}`}>
         <nav className="navbar">
-          <ul className="navbar-nav gap-2">
-            <li>
-              <Link href="/" className="link">
-                Home
-              </Link>
-            </li>
-            <li>
-              <Link href="/search" className="link">
-                Search
-              </Link>
-            </li>
-          </ul>
+          <Link href="/">
+            <h1 className="text-center text-4xl">Posts</h1>
+          </Link>
         </nav>
-        <TRPCReactProvider headers={headers()}>{children}</TRPCReactProvider>
+        <TRPCReactProvider headers={headers()}>
+          <div className="m-auto w-max">{children}</div>
+        </TRPCReactProvider>
       </body>
     </html>
   );
