@@ -38,7 +38,7 @@ declare module "next-auth" {
  */
 export const authOptions: NextAuthOptions = {
   callbacks: {
-    jwt: async ({ token, user }) => {
+    jwt: ({ token, user }) => {
       if (user) {
         token.id = user.id;
         token.email = user.email;
@@ -95,7 +95,7 @@ export const authOptions: NextAuthOptions = {
         return user
           ? {
               id: user.id,
-              name: user.name || user.username,
+              name: user.name ?? user.username,
               username: user.username,
               // email: "temp@temp.com",
             }
