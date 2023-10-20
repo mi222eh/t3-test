@@ -10,7 +10,7 @@ export function CreatePost() {
   const [name, setName] = useState("");
 
   const createPost = api.post.create.useMutation({
-    onSuccess: () => {
+    onSuccess: (data) => {
       router.refresh();
       setName("");
     },
@@ -19,7 +19,6 @@ export function CreatePost() {
   return (
     <form
       onSubmit={(e) => {
-        e.preventDefault();
         createPost.mutate({ name });
       }}
       className="flex flex-col gap-2"
@@ -29,11 +28,11 @@ export function CreatePost() {
         placeholder="Title"
         value={name}
         onChange={(e) => setName(e.target.value)}
-        className="w-full rounded-full px-4 py-2 text-black"
+        className="input input-primary"
       />
       <button
         type="submit"
-        className="rounded-full bg-white/10 px-10 py-3 font-semibold transition hover:bg-white/20"
+        className="btn btn-primary"
         disabled={createPost.isLoading}
       >
         {createPost.isLoading ? "Submitting..." : "Submit"}

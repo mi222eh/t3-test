@@ -36,19 +36,11 @@ export default function LoginForm() {
     >
       <div className="flex flex-col">
         <Label htmlFor="username">Username</Label>
-        <Input
-          type="text"
-          placeholder="Enter your username"
-          {...register("username")}
-        />
+        <Input type="text" {...register("username")} />
       </div>
       <div className="flex flex-col">
         <Label htmlFor="password">Password</Label>
-        <Input
-          type="password"
-          placeholder="Enter your password"
-          {...register("password")}
-        />
+        <Input type="password" {...register("password")} />
         {errors.password && (
           <span className="text-sm text-red-500">
             {errors.password.message?.toString()}
